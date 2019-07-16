@@ -20,6 +20,10 @@
 #import "GSCXScanner.h"
 #import "UIViewController+GSCXTraversal.h"
 
+/**
+ *  The text displayed when an opaque overlay scans itself and finds accessibility issues.
+ */
+static NSString *const kGSCXWindowOverlaySelfScanFailTitle = @"❌";
 NSString *const kGSCXWindowOverlayDismissButtonText = @"Dismiss";
 
 @interface GSCXWindowOverlayViewController ()
@@ -38,9 +42,7 @@ NSString *const kGSCXWindowOverlayDismissButtonText = @"Dismiss";
 
 @end
 
-@implementation GSCXWindowOverlayViewController {
-  BOOL _didLogSelfScan;
-}
+@implementation GSCXWindowOverlayViewController
 
 - (void)loadView {
   // If this object has a non-nil nibName (meaning it's being loaded from a xib or storyboard file),
@@ -76,9 +78,16 @@ NSString *const kGSCXWindowOverlayDismissButtonText = @"Dismiss";
 }
 
 - (void)processScanSelfResult:(GSCXScannerResult *)result {
-  if (result.issueCount && !_didLogSelfScan) {
-    _didLogSelfScan = YES;
-    NSLog(@"GSCXScanner accessibility issues were found on %@ %@.", self, result);
+  if (result.issueCount == 0) {
+    self.navigationItem.rightBarButtonItem = nil;
+    NSLog(@"Zero accessibility issues were found on %@.", self);
+  } else {
+    UILabel *label = [[UILabel alloc] init];
+    label.text = kGSCXWindowOverlaySelfScanFailTitle;
+    label.accessibilityLabel = @"Accessibility issues were found on this overlay";
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:label];
+    NSString *scanResultString = [self stringFromScanResult:result];
+    NSLog(@"Accessibility issue(s) were found on %@:\n%@", self, scanResultString);
   }
 }
 

@@ -49,7 +49,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype)init {
   self = [super init];
   if (self) {
-    _toolkit = [GTXToolKit toolkitWithNoChecks];
+    _toolkit = [[GTXToolKit alloc] init];
   }
   return self;
 }
@@ -82,11 +82,6 @@ NS_ASSUME_NONNULL_BEGIN
   } else {
     NSAssert(error, @"Error must be provided by GTXToolKit.");
     errors = [error.userInfo objectForKey:kGTXErrorUnderlyingErrorsKey];
-  }
-  if (errors.count) {
-    [GSCXAnalytics invokeAnalyticsEvent:GSCXAnalyticsEventErrorsFound count:errors.count];
-  } else {
-    [GSCXAnalytics invokeAnalyticsEvent:GSCXAnalyticsEventScanPerformed count:1];
   }
   NSArray<GSCXScannerIssue *> *issues = [self _scannerIssuesFromErrors:errors];
   UIView *_Nullable snapshot = [self _snapshotOfRootViews:rootViews];
@@ -132,12 +127,10 @@ NS_ASSUME_NONNULL_BEGIN
   }
   UIView *element = [error.userInfo objectForKey:kGTXErrorFailingElementKey];
   NSAssert(element, @"element cannot be nil.");
-  NSString *elementDescription = [NSString stringWithFormat:@"%@ %p", element.class, element];
   return [GSCXScannerIssue issueWithCheckNames:gtxCheckNames
                              checkDescriptions:gtxCheckDescriptions
                            frameInScreenBounds:element.accessibilityFrame
-                            accessibilityLabel:element.accessibilityLabel
-                            elementDescription:elementDescription];
+                            accessibilityLabel:element.accessibilityLabel];
 }
 
 - (UIView *_Nullable)_snapshotOfRootViews:(NSArray<UIView *> *)rootViews {

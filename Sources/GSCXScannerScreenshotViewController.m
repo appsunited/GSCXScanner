@@ -16,7 +16,6 @@
 
 #import "GSCXScannerScreenshotViewController.h"
 
-#import "GSCXReport.h"
 #import "GSCXRingView.h"
 #import "GSCXScannerResultTableViewController.h"
 
@@ -79,9 +78,7 @@
 
 @end
 
-@implementation GSCXScannerScreenshotViewController {
-  GSCXReport *_report;
-}
+@implementation GSCXScannerScreenshotViewController
 
 - (void)viewDidLoad {
   [super viewDidLoad];
@@ -89,20 +86,6 @@
   self.title = [NSString stringWithFormat:@"%ld Issues", (unsigned long)self.scanResult.issueCount];
   [self replaceLeftNavigationItemWithDismissButton];
   [self _addScreenshotToScreen:self.scanResult.screenshot];
-  UIBarButtonItem *shareButton = [[UIBarButtonItem alloc]
-                                  initWithTitle:@"Share"
-                                  style:UIBarButtonItemStylePlain
-                                  target:self
-                                  action:@selector(beginSharingIssues)];
-  self.navigationItem.rightBarButtonItem = shareButton;
-}
-
-- (void)beginSharingIssues {
-  _report = [[GSCXReport alloc] init];
-  __weak typeof(self) weakSelf = self;
-  [_report beginSharingResult:self.scanResult withCompletionBlock:^(NSURL *reportUrl) {
-    [weakSelf _shareReportAtURL:reportUrl];
-  }];
 }
 
 - (void)viewDidLayoutSubviews {
@@ -140,17 +123,6 @@
 }
 
 #pragma mark - Private
-
-- (void)_shareReportAtURL:(NSURL *)reportUrl {
-  if (reportUrl) {
-    NSMutableArray *activityItems = [[NSMutableArray alloc] init];
-    [activityItems addObject:reportUrl];
-    UIActivityViewController *controller =
-        [[UIActivityViewController alloc] initWithActivityItems:activityItems
-                                          applicationActivities:nil];
-    [self presentViewController:controller animated:YES completion:nil];
-  }
-}
 
 - (void)_addScreenshotToScreen:(UIView *)screenshot {
   screenshot.translatesAutoresizingMaskIntoConstraints = NO;

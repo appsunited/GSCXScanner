@@ -53,15 +53,12 @@ NS_ASSUME_NONNULL_BEGIN
  *  @param frameInScreenBounds The frame of the element with accessibility issues, in screen
  *                             coordinates.
  *  @param accessibilityLabel The accessibility label of the UI element with accessibility issues.
- *  @param elementDescription A description of the failing element.
- *
  *  @return An initialized GSCXScannerIssue instance.
  */
 - (instancetype)initWithCheckNames:(NSArray<NSString *> *)gtxCheckNames
                  checkDescriptions:(NSArray<NSString *> *)gtxCheckDescriptions
                frameInScreenBounds:(CGRect)frameInScreenBounds
-                accessibilityLabel:(nullable NSString *)accessibilityLabel
-                elementDescription:(NSString *)elementDescription;
+                accessibilityLabel:(nullable NSString *)accessibilityLabel;
 
 /**
  *  Constructs a GSCXScannerIssue instance with given check names, descriptions,
@@ -74,7 +71,6 @@ NS_ASSUME_NONNULL_BEGIN
  *  @param frameInScreenBounds The frame of the element with accessibility issues, in screen
  *                             coordinates.
  *  @param accessibilityLabel The accessibility label of the UI element with accessibility issues.
- *
  *  @return A GSCXScannerIssue instance.
  */
 + (instancetype)issueWithCheckNames:(NSArray<NSString *> *)gtxCheckNames
@@ -83,35 +79,9 @@ NS_ASSUME_NONNULL_BEGIN
                  accessibilityLabel:(nullable NSString *)accessibilityLabel;
 
 /**
- *  Constructs a GSCXScannerIssue instance with given check names, descriptions,
- *  and frame. Frame should be in screen coordinates.
- *
- *  @param gtxCheckNames An array of strings representing all the check names associated with a
- *                       single element. Must have equal count to @c gtxCheckDescriptions.
- *  @param gtxCheckDescriptions An array of strings representing all the descriptions associated
- *                              with a single element. Must have equal count to @c gtxCheckNames.
- *  @param frameInScreenBounds The frame of the element with accessibility issues, in screen
- *                             coordinates.
- *  @param accessibilityLabel The accessibility label of the UI element with accessibility issues.
- *  @param elementDescription A description of the failing element.
- *
- *  @return A GSCXScannerIssue instance.
- */
-+ (instancetype)issueWithCheckNames:(NSArray<NSString *> *)gtxCheckNames
-                  checkDescriptions:(NSArray<NSString *> *)gtxCheckDescriptions
-                frameInScreenBounds:(CGRect)frameInScreenBounds
-                 accessibilityLabel:(nullable NSString *)accessibilityLabel
-                 elementDescription:(NSString *)elementDescription;
-
-/**
  *  The number of accessibility issues associated with this issue.
  */
 - (NSUInteger)underlyingIssueCount;
-
-/**
- *  @return A HTML description of the issue.
- */
-- (NSString *)htmlDescription;
 
 @end
 
