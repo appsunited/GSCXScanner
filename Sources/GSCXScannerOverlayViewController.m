@@ -143,7 +143,7 @@ NSString *const kGSCXPerformScanAccessibilityIdentifier =
   self.performScanButton.hidden = ![[NSUserDefaults standardUserDefaults] boolForKey:gscxScannerToggle];
 
   [[NSNotificationCenter defaultCenter] addObserverForName:gscxScannerToggle object:nil queue:nil usingBlock:^(NSNotification * _Nonnull note) {
-    self.performScanButton.hidden = [[NSUserDefaults standardUserDefaults] boolForKey:gscxScannerToggle];
+    self.performScanButton.hidden = ![[NSUserDefaults standardUserDefaults] boolForKey:gscxScannerToggle];
   }];
 }
 
