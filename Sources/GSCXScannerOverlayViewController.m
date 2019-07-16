@@ -87,7 +87,6 @@ NSString *const kGSCXPerformScanAccessibilityIdentifier =
  *  YES if the accessibility is not enabled alert has already been shown, NO otherwise.
  */
 @property(assign, nonatomic) BOOL accessibilityNotEnabledAlertShown;
-
 /**
  *  Presents an alert telling users that zero accessibility issues were found in the last scan.
  */
@@ -131,16 +130,21 @@ NSString *const kGSCXPerformScanAccessibilityIdentifier =
 
 - (void)viewDidLoad {
   [super viewDidLoad];
-
+    
+  NSString *gscxScannerToggle = @"io.moia.debug.gscxScannerToggle";
+  
   self.performScanButton.accessibilityIdentifier = kGSCXPerformScanAccessibilityIdentifier;
   self.performScanButton.layer.borderWidth = 1.0;
   self.performScanButton.layer.borderColor = [[UIColor blackColor] CGColor];
   self.performScanButton.layer.cornerRadius = 4.0;
   self.performScanButton.translatesAutoresizingMaskIntoConstraints = NO;
-  self.performScanConstraints = [GSCXCornerConstraints constraintsWithView:self.performScanButton
-                                                                 container:self];
-  self.performScanButton.accessibilityCustomActions =
-      self.performScanConstraints.rotateAccessibilityActions;
+  self.performScanConstraints = [GSCXCornerConstraints constraintsWithView:self.performScanButton container:self];
+  self.performScanButton.accessibilityCustomActions = self.performScanConstraints.rotateAccessibilityActions;
+  self.performScanButton.hidden = ![[NSUserDefaults standardUserDefaults] boolForKey:gscxScannerToggle];
+
+  [[NSNotificationCenter defaultCenter] addObserverForName:gscxScannerToggle object:nil queue:nil usingBlock:^(NSNotification * _Nonnull note) {
+    self.performScanButton.hidden = [[NSUserDefaults standardUserDefaults] boolForKey:gscxScannerToggle];
+  }];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
