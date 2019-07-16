@@ -131,7 +131,7 @@ NSString *const kGSCXPerformScanAccessibilityIdentifier =
 - (void)viewDidLoad {
   [super viewDidLoad];
     
-  NSString *gscxScannerToggle = @"io.moia.debug.gscxScannerToggle";
+  NSString *gscxScannerToggle = @"io.moia.debugMenu.gscxScannerToggle";
   
   self.performScanButton.accessibilityIdentifier = kGSCXPerformScanAccessibilityIdentifier;
   self.performScanButton.layer.borderWidth = 1.0;
