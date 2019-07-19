@@ -67,7 +67,9 @@ NS_ASSUME_NONNULL_BEGIN
 @implementation GSCXAutoInstaller
 
 + (void)load {
-  [GSCXAutoInstallerAppListener startListening];
+  if (![[NSProcessInfo processInfo].arguments containsObject:@"UITest"]) {
+    [GSCXAutoInstallerAppListener startListening];
+  }
 }
 
 @end
