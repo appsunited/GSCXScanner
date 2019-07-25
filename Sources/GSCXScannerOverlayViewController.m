@@ -132,6 +132,9 @@ NSString *const kGSCXPerformScanAccessibilityIdentifier =
   [super viewDidLoad];
     
   NSString *gscxScannerToggle = @"io.moia.debugMenu.gscxScannerToggle";
+  BOOL gscxScannerEnabled = ![[NSUserDefaults standardUserDefaults] boolForKey:gscxScannerToggle];
+    
+  self.accessibilityNotEnabledAlertShown = ![[NSUserDefaults standardUserDefaults] boolForKey:gscxScannerToggle];
   
   self.performScanButton.accessibilityIdentifier = kGSCXPerformScanAccessibilityIdentifier;
   self.performScanButton.layer.borderWidth = 1.0;
@@ -141,9 +144,16 @@ NSString *const kGSCXPerformScanAccessibilityIdentifier =
   self.performScanConstraints = [GSCXCornerConstraints constraintsWithView:self.performScanButton container:self];
   self.performScanButton.accessibilityCustomActions = self.performScanConstraints.rotateAccessibilityActions;
   self.performScanButton.hidden = ![[NSUserDefaults standardUserDefaults] boolForKey:gscxScannerToggle];
-
+  self.performScanButton.hidden = gscxScannerEnabled;
+    
   [[NSNotificationCenter defaultCenter] addObserverForName:gscxScannerToggle object:nil queue:nil usingBlock:^(NSNotification * _Nonnull note) {
-    self.performScanButton.hidden = ![[NSUserDefaults standardUserDefaults] boolForKey:gscxScannerToggle];
+    BOOL gscxScannerEnabled = ![[NSUserDefaults standardUserDefaults] boolForKey:gscxScannerToggle];
+    self.performScanButton.hidden = gscxScannerEnabled;
+    self.accessibilityNotEnabledAlertShown = gscxScannerEnabled;
+        
+    if (!self.accessibilityEnabled && !self.accessibilityNotEnabledAlertShown) {
+      [self _presentAccessibilityNotEnabledAlert];
+    }
   }];
 }
 
