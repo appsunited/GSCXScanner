@@ -54,7 +54,12 @@ NS_ASSUME_NONNULL_BEGIN
                                              object:nil];
     
   [[NSNotificationCenter defaultCenter] addObserver:[GSCXAutoInstallerAppListener defaultListener]
-                                           selector:@selector(reinstallScanner:)
+                                           selector:@selector(toggleScanner)
+                                               name:@"io.moia.debugMenu.gscxScannerToggle"
+                                             object:nil];
+    
+  [[NSNotificationCenter defaultCenter] addObserver:[GSCXAutoInstallerAppListener defaultListener]
+                                           selector:@selector(reinstallScanner)
                                                name:@"io.moia.debugMenu.gscxScannerInstall"
                                              object:nil];
 }
@@ -63,9 +68,15 @@ NS_ASSUME_NONNULL_BEGIN
   NSAssert(_overlayWindow == nil, @"iOS Scanner was already installed.");
   // TODO: Also check if scanner was installed using other APIs in GSCXInstaller.
   _overlayWindow = [GSCXInstaller installScanner];
+  [self toggleScanner];
 }
 
-- (void)reinstallScanner:(NSNotification *)notification {
+- (void)toggleScanner {
+    BOOL gscxScannerDisabled = ![[NSUserDefaults standardUserDefaults] boolForKey:@"io.moia.debugMenu.gscxScannerToggle"];
+    _overlayWindow.hidden = gscxScannerDisabled;
+}
+
+- (void)reinstallScanner {
   _overlayWindow = nil;
   _overlayWindow = [GSCXInstaller installScanner];
 }
